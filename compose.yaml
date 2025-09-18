@@ -39,6 +39,9 @@ services:
       KC_HOSTNAME_STRICT: "false"
     volumes:
       - kc-data:/opt/keycloak/data
+    command:
+      - start
+
     networks:
       - kc-net
 
@@ -48,3 +51,5 @@ volumes:
 
 networks:
   kc-net:
+
+
