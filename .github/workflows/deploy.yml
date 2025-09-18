@@ -30,19 +30,22 @@ jobs:
           KEYCLOAK_ADMIN=${{ secrets.KEYCLOAK_ADMIN }}
           KEYCLOAK_ADMIN_PASSWORD=${{ secrets.KEYCLOAK_ADMIN_PASSWORD }}
           EOF
-
       - name: Copy files to server
         run: |
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
-            --exclude '.git' \
-            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/keycloak-stack/
+            --exclude '.git' --exclude '.github' \
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/keycloak-stack/
 
       - name: Deploy via SSH
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             set -e
-            cd /opt/keycloak-stack
+            cd ~/keycloak-stack
+            chmod 600 .env || true
+            # اگر یوزرت عضو گروه docker نیست، جلوی دستورات بعدی "sudo" بذار
             docker compose pull
+            docker compose down --remove-orphans || true
             docker compose --env-file .env up -d
             docker compose ps
           EOF
+
