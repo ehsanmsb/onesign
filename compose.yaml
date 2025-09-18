@@ -38,10 +38,9 @@ services:
       KC_METRICS_ENABLED: "true"
       KC_HOSTNAME_STRICT: "true"
       KC_HTTP_ENABLED: "true"
-      KC_PROXY: edge
-      KC_HOSTNAME: onesign.ir
+      KC_HOSTNAME: "https://onesign.ir"
       KC_PROXY_HEADERS: xforwarded
-      KC_HOSTNAME_ADMIN: admin-console.onesign.ir
+      KC_HOSTNAME_ADMIN: "https://admin-console.onesign.ir"
     volumes:
       - kc-data:/opt/keycloak/data
     restart: unless-stopped
