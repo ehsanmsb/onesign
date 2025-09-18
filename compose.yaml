@@ -26,7 +26,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "80:8080"
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
@@ -36,12 +36,16 @@ services:
       KC_DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
       KC_HEALTH_ENABLED: "true"
       KC_METRICS_ENABLED: "true"
-      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT: "true"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY: edge
+      KC_HOSTNAME: onesign.ir
+      KC_PROXY_HEADERS: xforwarded
+      KC_HOSTNAME_ADMIN: admin-console.onesign.ir
     volumes:
       - kc-data:/opt/keycloak/data
-    command:
-      - start
-
+    restart: unless-stopped
+    command: ["start", "--optimized"]
     networks:
       - kc-net
 
